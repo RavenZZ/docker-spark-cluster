@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  spark-master:
+    build:
+      context: ./master
+      dockerfile: Dockerfile
+    environment:
+      - raven=raven
+    ports:
+      - "50001:6066"
+      - "50002:7077"   # SPARK_MASTER_PORT
+      - "50003:8080"   # SPARK_MASTER_WEBUI_PORT
+    expose:
+      - 7077
+  spark-worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    ports:
+      - "50004:8081"
+    deploy:
+      replicas: 2
+    links:
+      - spark-master
+    environment:
+      - SPARK_MASTER=spark://spark-master:7077
+
+
+
+
+
+
