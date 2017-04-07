@@ -13,20 +13,28 @@ services:
       - "50003:8080"   # SPARK_MASTER_WEBUI_PORT
     expose:
       - 7077
-  spark-worker:
+
+  spark-worker1:
     build:
       context: ./worker
       dockerfile: Dockerfile
     ports:
       - "50004:8081"
-    deploy:
-      replicas: 2
     links:
       - spark-master
     environment:
       - SPARK_MASTER=spark://spark-master:7077
 
-
+  spark-worker2:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    ports:
+      - "50005:8081"
+    links:
+      - spark-master
+    environment:
+      - SPARK_MASTER=spark://spark-master:7077
 
 
 
